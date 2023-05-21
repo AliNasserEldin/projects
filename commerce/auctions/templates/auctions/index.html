@@ -1,0 +1,16 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div>
+</div>
+  {% for item in listings %}
+    <a href="{% url 'auctions:listing' id=item.id %}" class="flex items-center bg-white border border-gray-200 rounded-lg p-1">
+        <img src={{item.image}} alt="{{item.title}}" class="w-54 h-40 rounded-lg mr-4">
+        <div>
+          <h2 class="text-xl  text-gray-900"> {{item.title}} </h2>
+          <p class="text-md"> {{ item.discription }} </p>
+          <h1 class="font-semibold text-4xl">{{item.price}} $</h1>
+        </div>
+      </a>
+      {% endfor %}
+{% endblock %}

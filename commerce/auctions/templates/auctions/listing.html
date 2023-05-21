@@ -1,0 +1,75 @@
+ {% extends "auctions/layout.html" %}
+
+ 
+{% block title %}
+listing
+{% endblock %}
+
+{% block body %}
+
+    <div class="flex flex-wrap mx-4 w-full">
+      <div class="w-full md:w-1/2 px-4">
+        <img src={{listing.image}} alt="listing Image" class="w-full">
+        
+        {% if listing.is_active %}
+          {% if in_watchlist %}
+          <form method="post" action="{% url 'auctions:listing' id=listing.id %}">
+            {% csrf_token %}
+            <input type="submit" name="in_watchlist" class="w-full border border-1 bg-blue-500 hover:bg-blue-600 p-2 mt-4 text-white font-bold rounded-lg" value="remove from watchlist">
+          </form>
+          {% else %}
+        <form method="post" action="{% url 'auctions:listing' id=listing.id %}">
+          {% csrf_token %}
+          <input type="submit" name="in_watchlist" class="w-full border border-1 bg-blue-500 hover:bg-blue-600 p-2 mt-4 text-white font-bold rounded-lg" value="add to watchlist">
+        </form>
+          {% endif %}
+          {% endif %}
+          
+      </div>
+      <div class="w-full md:w-1/2 px-4 mt-4">
+        <h1 class="text-3xl font-bold mb-2">{{listing.title}}</h1>
+        {% if is_owner and listing.is_active %}
+      <form method="post" action="{% url 'auctions:close_auction' id=listing.id %}">
+        {% csrf_token %}
+        <input type="submit" name="close" value="Close auction" class="bg-red-500 p-1 rounded-lg text-white font-bold">
+      </form>
+      {% endif %}
+        <p class="text-lg mb-4">{{listing.description}} </p>
+          <p class="text-lg font-bold mb-2">the highest price now is: ${{listing.price}}</p>
+
+          {% if listing.is_active %}
+        <form method="post" action="{% url 'auctions:listing' id=listing.id %}" class="w-1/2">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" class="mx-2 bg-red-600 hover:bg-red-700 text-white font-bold p-1 rounded-lg">Place bid</button>
+      </form>
+      {% else %}
+      <p class="text-lg text-red-600 font-bold">Closed</p>
+      <p class="text-lg text-green-600 font-bold">You won this auction {{listing.winner}}</p>
+      {% endif %}
+
+      
+
+      </div>
+      
+      
+
+  </div>
+  
+  <hr class="m-10" style="border-color: black;">
+      <div class="px-4">
+        {% if listing.is_active %}
+        <form method="post" action="{% url 'auctions:add_comments' id=listing.id %}" >
+          {% csrf_token %}
+          <input type="text" name="comment" placeholder="Write Comment" class="w-1/2 border border-2 p-2 rounded-xl">
+          <input type="submit" class="bg-sky-700 text-white rounded-lg font-bold p-2">
+        </form>
+        {% endif %}
+        <div class="m-2">
+      {% for comment in listing.comments.all %}
+      <p class="text-sky-700 font-bold">{{comment.writer}} : </p>
+     <p> {{comment.content}}</p>
+      {% endfor %}
+    </div>
+  </div>
+  {% endblock %}

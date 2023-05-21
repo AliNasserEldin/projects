@@ -1,0 +1,18 @@
+{% extends 'auctions/layout.html' %}
+{% block title %}
+Categories
+{% endblock %}
+{% block body %}
+
+            <div class="m-10">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Categories</h2>
+                <ul class="grid grid-cols-2 gap-4">
+                    {% for cat in categories %}
+                    <li class="bg-white rounded-lg shadow-md py-4 px-6 hover:bg-gray-50 ">
+                        <a href="{% url 'auctions:categorized' category=cat.1 %}" class="hover:text-blue-700 font-bold">{{cat.1}}</a>
+                    </li>
+                {% endfor %}
+                    
+                </ul>
+            </div>
+        {% endblock %}
